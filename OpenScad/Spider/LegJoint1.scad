@@ -2,11 +2,11 @@
 $fn = 30;
 tubeRadius = 2;
 
-jointThickInner = 4;
-jointRadiusInner = 10;
-jointRadiusInnerGroove=jointRadiusInner-4;
+jointThickInner = 2.5;
+jointRadiusInner = 10.5;
+jointRadiusInnerGroove=jointRadiusInner-2;
 
-jointPinRadius = 5;
+jointPinRadius = 3.6;
 
 legTipLen = 20;
 legTipWidth = 4;
@@ -32,7 +32,7 @@ module legjointBall()
     {
         minkowski()
         {
-                    sphere(r=1);
+                    sphere(r=0.5);
                     union(){
                         cylinder(r1=jointRadiusInner, r2=jointRadiusInnerGroove, h=jointThickInner, center=true);
                         
