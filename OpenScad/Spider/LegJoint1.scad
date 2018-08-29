@@ -22,7 +22,7 @@ legTipWidth = 4;
 faces = 60;
 caddy_thickness=2;
 caddy_edges_widths=2; //Size of side left after subtracting to reduce print material/time
-servo_height=15.5;
+servo_height=24;
 servo_width=13;
 servo_length=24.5;
 screw_lips=4;
@@ -49,7 +49,7 @@ hinge_servo_height = servo_height + 8;
 hinge_radius_hole=hinge_radius+0.2;
 hinge_radius_servo_hole=3.5;
 hinge_radius_servo_screw_hole=8;
-hinge_radius_servo_screw_hole_radius=0.5;
+hinge_radius_servo_screw_hole_radius=0.6;
 hinge_arm_length=5;
 
 boneLength=10;
@@ -90,9 +90,10 @@ module legJoint1()
         union()
         {
             translate([-hinge_length, boneWidth/2-0.3, 0]) hinge2();
-            translate([boneLength/2,0,8]) leg();
+            translate([jointRadiusInner,0,8]) leg();
         }
         translate([-5, 0, -hinge_thickness/2+0.2]) rotate([0,90,0]) cylinder(r=cordHoleRadius, h=40, center=true);
+        rotate([0,0, 5]) translate([-5, 2, -hinge_thickness/2+0.2]) rotate([0,90,0]) cylinder(r=cordHoleRadius, h=40, center=true);
     }
     
 }
@@ -100,12 +101,31 @@ module legJoint1()
 
 module leg()
 {
-    translate([boneLength/2+jointRadiusInner, 0,0])  rotate([90,0,0]) legjointMale();
+    //translate([boneLength/2+jointRadiusInner, 0,0])  
+    rotate([90,0,0]) legjointMale();
     //translate([boneLength/2+jointRadiusInner/2-4, 0,0]) cube([6, boneWidth, jointRadiusInner*2], center=true);
-    hull()
+//    hull()
+//    {
+//        translate([boneLength/2+jointRadiusInner/2-4, 0,0]) cube([6, boneWidth, jointRadiusInner*2], center=true);
+//        cube([boneLength, boneWidth, boneHeight], center=true);
+//    }
+}
+
+
+module legjointMale()
+{
+    difference()
     {
-        translate([boneLength/2+jointRadiusInner/2-4, 0,0]) cube([6, boneWidth, jointRadiusInner*2], center=true);
-        cube([boneLength, boneWidth, boneHeight], center=true);
+        minkowski()
+        {
+            sphere(r=0.5);
+            union(){
+                cylinder(r1=jointRadiusInner, r2=jointRadiusInnerGroove, h=jointThickInner, center=true);
+                cylinder(r1=jointRadiusInnerGroove, r2=jointRadiusInner , h=jointThickInner, center=true);
+            }
+        }
+        
+        cylinder(r=legjointPinRadius, h=jointThickInner*3, center=true);
     }
 }
 
@@ -131,11 +151,10 @@ module hinge2()
 			hull()
 			{
 				translate([0,servo_width/2-hinge_thickness,0]) cylinder(r=servo_width/2, h=hinge_thickness, center=true);
-				//translate([hinge_length/2,0,0]) cube([hinge_length, servo_width, hinge_thickness], center=true);
                 translate([hinge_length,0,0]) cube([hinge_thickness, servo_width/2, hinge_thickness ], center=true);
 			}
 			translate([0,servo_width/2-hinge_thickness,0]) cylinder(r=hinge_radius_servo_hole, h=hinge_thickness+1, $fn=faces, center=true);
-			translate([0,servo_width/2-hinge_thickness*2+2,0]) translate([hinge_radius_servo_screw_hole,0,0]) cylinder(r=hinge_radius_servo_screw_hole_radius, h=hinge_thickness+1, $fn=faces, center=true);
+			translate([0,servo_width/2-hinge_thickness*2+3,0]) translate([hinge_radius_servo_screw_hole,0,0]) cylinder(r=hinge_radius_servo_screw_hole_radius, h=hinge_thickness+1, $fn=faces, center=true);
 		}	
 
 
@@ -146,7 +165,6 @@ module hinge2()
 			hull()
 			{
 				translate([0,servo_width/2-hinge_thickness,0]) cylinder(r=servo_width/2, h=hinge_thickness, $fn=faces, center=true);
-				//translate([hinge_length/2,-servo_width/2,0]) cube([hinge_length, servo_width, hinge_thickness], center=true);
                 translate([hinge_length,0,0]) cube([hinge_thickness, servo_width/2, hinge_thickness ], center=true);
 			}
 			translate([0,servo_width/2-hinge_thickness,0]) cylinder(r=hinge_radius_hole, h=hinge_thickness+1, $fn=faces, center=true);
@@ -159,9 +177,10 @@ module hinge2()
                 
         translate([hinge_length,0,hinge_servo_height]) rotate([180,0,0]) cornerReinforce();
         
-        translate([16,-hinge_thickness/2+0.1,-hinge_thickness+0.5]) cordRunner(24);
-
-        //rotate([0,-1,-18]) translate([16,-hinge_thickness/2+9,-hinge_thickness]) cordRunner(24);
+        translate([16,-hinge_thickness/2+0.1,-hinge_thickness+0.5]) cordRunner(28);
+        
+        rotate([0,0, 5]) translate([16,-hinge_thickness/2+0.1,-hinge_thickness+0.5]) cordRunner(28);
+        
    	}//union
 
 
@@ -169,24 +188,6 @@ module hinge2()
 
 
 
-module legjointMale()
-{
-    difference()
-    {
-        minkowski()
-        {
-                    sphere(r=0.5);
-                    union(){
-                        cylinder(r1=jointRadiusInner, r2=jointRadiusInnerGroove, h=jointThickInner, center=true);
-                        
-                        cylinder(r1=jointRadiusInnerGroove, r2=jointRadiusInner , h=jointThickInner, center=true);
-                    }
-        }
-        
-        cylinder(r=legjointPinRadius, h=jointThickInner*3, center=true);
-        
-    }
-}
 
 
 module legjointFemale()
