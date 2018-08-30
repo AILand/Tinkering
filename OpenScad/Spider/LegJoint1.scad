@@ -9,6 +9,9 @@ jointRadiusInnerGroove=jointRadiusInner-2;
 jointPinRadius = 3.6;
 legjointPinRadius=5;
 
+legBone2Length=20;
+legJointSpacer=0.4;
+
 legTipLen = 20;
 legTipWidth = 4;
 
@@ -72,7 +75,49 @@ cordHoleRadius = 0.8;
 //complete_caddy();
 
 //legHinge();
-legJoint1();
+//legJoint1();
+//legJoint2(legBone2Length);
+legJoint2(12);
+
+
+
+module legJoint2(boneLength)
+{
+    //leg();
+    translate([boneLength/2+jointPinRadius,0,0]) rotate([90,90,0]) cylinder(r=jointPinRadius*2, h=boneWidth, center=true);
+    translate([boneLength/2+jointPinRadius,(boneWidth+jointThickInner)/2+1,0]) legjointFemale();
+    cube([boneLength, boneWidth, boneHeight], center=true); 
+    
+    translate([-4.5,3.5,0])
+    difference()
+    {
+         cube([2.5, 4, 4], center=true); 
+         translate([0,0.5,0]) cylinder(r=cordHoleRadius-0.1, h=10, center=true);
+    }
+}
+
+
+module legjointFemale()
+{    
+    //rotate([90,90,0]) cylinder(r=jointPinRadius*2, h=boneWidth, center=true);
+    rotate([90,90,0]) 
+    difference()
+    {
+        union()
+        {
+            cylinder(r=legjointPinRadius-legJointSpacer, h=boneWidth+3, center=true);
+            translate([0,0,-boneWidth+1]) resize([0,0,4]) sphere(r=5, center=true);
+            
+        }
+        
+        cylinder(r=legjointPinRadius-legJointSpacer-2.3, h=boneWidth*2+2, center=true);
+        rotate([0,0,90]) translate([0,0,-5]) cube([20,1,20], center=true);
+         rotate([0,0,0]) translate([0,0,-5]) cube([20,1,20], center=true);
+        //translate([0,0,-9]) cube([20,5.5,20], center=true);
+    }
+}
+
+
 
 module cornerReinforce()
 {
@@ -90,7 +135,7 @@ module legJoint1()
         union()
         {
             translate([-hinge_length, boneWidth/2-0.3, 0]) hinge2();
-            translate([jointRadiusInner,0,8]) leg();
+            translate([jointRadiusInner,0,8])     rotate([90,0,0]) legjointMale(); 
         }
         translate([-5, 0, -hinge_thickness/2+0.2]) rotate([0,90,0]) cylinder(r=cordHoleRadius, h=40, center=true);
         rotate([0,0, 5]) translate([-5, 2, -hinge_thickness/2+0.2]) rotate([0,90,0]) cylinder(r=cordHoleRadius, h=40, center=true);
@@ -98,6 +143,11 @@ module legJoint1()
     
 }
 
+//module bone()
+//{
+//    legjointFemale();
+//    cube([ legBone2Length, boneWidth, boneHeight], center=true); 
+//}
 
 module leg()
 {
@@ -110,6 +160,7 @@ module leg()
 //        cube([boneLength, boneWidth, boneHeight], center=true);
 //    }
 }
+
 
 
 module legjointMale()
@@ -190,24 +241,6 @@ module hinge2()
 
 
 
-module legjointFemale()
-{
-    difference()
-    {
-        minkowski()
-        {
-                    sphere(r=0.5);
-                    union(){
-                        cylinder(r1=jointRadiusInner, r2=jointRadiusInnerGroove, h=jointThickInner, center=true);
-                        
-                        cylinder(r1=jointRadiusInnerGroove, r2=jointRadiusInner , h=jointThickInner, center=true);
-                    }
-        }
-        
-        cylinder(r=jointPinRadius, h=jointThickInner*3, center=true);
-        
-    }
-}
 
 
 module legHinge()

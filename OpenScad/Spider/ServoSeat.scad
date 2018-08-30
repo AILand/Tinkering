@@ -25,7 +25,8 @@ spacer=0.2;
 
 
 //translate([45,0,0]) seat();
-seatRun();
+//seatRun();
+seat();
 
 module seat()
 {
