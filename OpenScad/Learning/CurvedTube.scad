@@ -4,21 +4,20 @@ tubeWidthOuter=5;
 
 
 //halfCircleTube(10, 30);
-quarterCircleTube(10,5,30);
-translate([-60,0,0]) rotate([180,0,-90]) quarterCircleTube(10,5,30);
+//quarterCircleTube(10,5,30);
+//translate([-60,0,0]) rotate([180,0,-90]) quarterCircleTube(10,5,30);
+//translate([0,-30,0]) rotate([0,90,0]) straightTube(10,5,30);
 
-translate([0,-30,0]) rotate([0,90,0]) straightTube(10,5,30);
+//translate([0,-30,0]) rotate([0,90,0]) straightTube(10,5,10);
 
-
-
-module straightTube(tubeRadius, holeRadius, length)
+module straightTube(tubeRadius, holeRadius, tubeLength)
 {
     totalOuterRadius=(tubeRadius+bendRadius)*2;
     
     difference()
     {
-        linear_extrude(l=length, convexity=10) translate([bendRadius, 0]) circle(tubeRadius);
-        linear_extrude(l=length, convexity=10) translate([bendRadius, 0]) circle(holeRadius);
+        linear_extrude(height=tubeLength, convexity=10) translate([bendRadius, 0]) circle(tubeRadius);
+        linear_extrude(height=tubeLength, convexity=10) translate([bendRadius, 0]) circle(holeRadius);
     }
 }
 

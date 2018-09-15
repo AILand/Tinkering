@@ -1,4 +1,6 @@
 
+include <../Learning/CurvedTube.scad>
+
 $fn = 30;
 tubeRadius = 2;
 
@@ -75,10 +77,26 @@ cordHoleRadius = 0.8;
 //complete_caddy();
 
 //legHinge();
-//legJoint1();
+legJoint1();
 //legJoint2(legBone2Length);
-legJoint2(12);
+//legJoint2(12);
 
+tubeRadius=0.8;
+holeRadius=0;
+
+//translate([-2,0,0]) rotate([0,0,0]) straightTube(tubeRadius,holeRadius,30);
+
+translate([4,0,1]) tube2();
+
+
+module tube2()
+{
+    translate([-30-4,0,-2]) rotate([0,90,0]) straightTube(tubeRadius,holeRadius,30);
+    translate([-4,0,0]) rotate([0,-90,90]) quarterCircleTube(tubeRadius,holeRadius,2);
+    translate([-2,0,0]) rotate([0,0,0]) straightTube(tubeRadius,holeRadius,15);
+    translate([0,0,15]) rotate([90,90,0]) quarterCircleTube(tubeRadius,holeRadius,2);
+    translate([0,0,2+15]) rotate([0,90,0]) straightTube(tubeRadius,holeRadius,30);
+}
 
 
 module legJoint2(boneLength)
