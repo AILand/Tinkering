@@ -12,7 +12,7 @@ int loopCounter=0;
 int logFlexLevel = 0;
 int logGyroLevel = 0;
 int logWirelessTxLevel = 1;
-int logWirelessRxLevel = 1;
+int logWirelessRxLevel = 0;
 
 //Gyro
 const int MPU_addr=0x68;  // I2C address of the MPU-6050
@@ -127,6 +127,8 @@ void SendData()
      printf("Sending %d, %d, %d, %d, %d \n\r",dataToSend[0],dataToSend[1],dataToSend[2],dataToSend[3],dataToSend[4]);   
  
   }
+  
+    myRadio.stopListening();  
   myRadio.write(dataToSend, sizeof(dataToSend)); //Sends the Data
 }
 
@@ -183,9 +185,9 @@ void ReadGyro()
   GyY=Wire.read()<<8|Wire.read();  // 0x45 (GYRO_YOUT_H) & 0x46 (GYRO_YOUT_L)
   GyZ=Wire.read()<<8|Wire.read();  // 0x47 (GYRO_ZOUT_H) & 0x48 (GYRO_ZOUT_L)
 
-  dataToSend[0] = GyX;
-  dataToSend[1] = GyY;
-  dataToSend[2] = GyZ;
+  dataToSend[0] = AcX;
+  dataToSend[1] = AcY;
+  dataToSend[2] = AcZ;
     
   if (logGyroLevel>0)
   {
